@@ -1,0 +1,48 @@
+[
+  {
+    "ContainingType": "BloodDonation.API.Controllers.DonorController",
+    "Method": "GetAll",
+    "RelativePath": "Donor/api",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BloodDonation.API.Controllers.DonorController",
+    "Method": "Post",
+    "RelativePath": "Donor/api",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BloodDonation.API.Controllers.DonorController",
+    "Method": "Put",
+    "RelativePath": "Donor/api",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BloodDonation.API.Controllers.DonorController",
+    "Method": "GetById",
+    "RelativePath": "Donor/api/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
