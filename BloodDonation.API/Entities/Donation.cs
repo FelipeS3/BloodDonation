@@ -2,17 +2,17 @@
 
 public class Donation : BaseEntity
 {
-    public Donation(int idDonor, int quantityMl)
+    public Donation(int donorId, int volumeInML)
     {
-        IdDonor = idDonor;
-        VolumeInML = quantityMl;
+        DonorId = donorId;
+        VolumeInML = volumeInML;
         DonationDate = DateTime.UtcNow;
 
         ValidateVolume();
     }
     public int VolumeInML { get; private set; }
     public DateTime DonationDate { get; private set; }
-    public int IdDonor { get; private set; }
+    public int DonorId { get; private set; }
     public Donor Donor { get; private set; }
 
     private void ValidateVolume()

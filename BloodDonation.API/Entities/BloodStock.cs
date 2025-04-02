@@ -2,6 +2,6 @@
 
 public class BloodStock : BaseEntity
 {
-    public string  
+    
 }
 
