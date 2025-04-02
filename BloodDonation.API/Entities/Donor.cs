@@ -37,10 +37,12 @@ public class Donor : BaseEntity
         if (Weight < 50) return false;
         if (Age < 18) return false;
 
-        var lastDonation = Donations.OrderByDescending(d => d.DataDoacao).FirstOrDefault();
+        var lastDonation = Donations.OrderByDescending(d => d.DonationDate).FirstOrDefault();
+
         if (lastDonation != null)
         {
-            var daysSinceLast = (DateTime.Now - lastDonation.DataDoacao).TotalDays;
+            var daysSinceLast = (DateTime.Now - lastDonation.DonationDate).TotalDays;
+
             if (Gender == Gender.Female && daysSinceLast < 90) return false;
             if (Gender == Gender.Male && daysSinceLast < 60) return false;
         }
