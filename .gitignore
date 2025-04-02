@@ -1,0 +1,1 @@
+-e "## Ignore Visual Studio temporary files\n.vs/\n\n## ReSharper cache\n_ReSharper.Caches/\n\n## Build results\n[Bb]in/\n[Oo]bj/\n\n## User files\n*.user\n*.suo\n*.lock.json\n\n## Misc\n.DS_Store\n*.log\n\n## NuGet\npackages/\n\n## VS Code\n.vscode/" 

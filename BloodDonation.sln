@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35208.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodDonation.API", "BloodDonation.API\BloodDonation.API.csproj", "{8DD9E141-1F23-463C-BF8D-E1E5630B0EB1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8DD9E141-1F23-463C-BF8D-E1E5630B0EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DD9E141-1F23-463C-BF8D-E1E5630B0EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DD9E141-1F23-463C-BF8D-E1E5630B0EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DD9E141-1F23-463C-BF8D-E1E5630B0EB1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7E863A4C-B2D1-4E91-87F2-AB538D013F0E}
+	EndGlobalSection
+EndGlobal
