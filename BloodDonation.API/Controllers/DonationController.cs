@@ -11,7 +11,7 @@ namespace BloodDonation.API.Controllers;
 public class DonationController : ControllerBase
 {
     private readonly  BloodDonationDbContext _context;
-    private DonationController(BloodDonationDbContext context)
+    public DonationController(BloodDonationDbContext context)
     {
         _context = context;
     }
@@ -37,9 +37,9 @@ public class DonationController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult RegisterDonation([FromBody] DonationInputViewModel input)
+    public IActionResult RegisterDonation([FromBody] CreateDonationInputModel input)
     {
-        var donation = new Donation(input.DonorId, input.VolumeInML);
+        var donation = input.ToEntity();
         
         _context.Donations.Add(donation);
         _context.SaveChanges();
