@@ -5,7 +5,7 @@ namespace BloodDonation.API.Data;
 
 public class BloodDonationDbContext : DbContext
 {
-    public BloodDonationDbContext(DbContextOptions<BloodDonationDbContext> options)
+    public BloodDonationDbContext(DbContextOptions<BloodDonationDbContext> options) : base(options)
     { }
 
     public DbSet<Donor> Donors { get; private set; }
