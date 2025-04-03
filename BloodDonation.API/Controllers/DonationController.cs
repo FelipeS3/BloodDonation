@@ -15,6 +15,12 @@ public class DonationController : ControllerBase
         _context = context;
     }
 
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        return Ok(_context.Donors.ToList());
+    }
+
     [HttpGet("{id}")]
     public IActionResult GetDonation(int id)
     {
@@ -28,9 +34,6 @@ public class DonationController : ControllerBase
     [HttpPost]
     public IActionResult RegisterDonation([FromBody] DonationInputViewModel input)
     {
-        var donor = _context.Donors.Find(input.DonorId);
-        if (donor is null) return NotFound("Donor id not found.");
-       
         var donation = new Donation(input.DonorId, input.VolumeInML);
         
         _context.Donations.Add(donation);
