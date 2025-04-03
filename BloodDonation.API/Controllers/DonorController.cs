@@ -1,4 +1,6 @@
 ﻿using BloodDonation.API.Data;
+using BloodDonation.API.Entities;
+using BloodDonation.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +19,9 @@ public class DonorController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok();
+        var donor = _context.Donors.ToList();
+
+        return Ok(donor);
     }
 
     [HttpGet("{id}")]
@@ -31,14 +35,38 @@ public class DonorController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post()
+    public IActionResult Post([FromBody] DonorInputViewModel input)
     {
-        return Created();
+        var donor = new Donor(input.FullName, input.Email, input.BirthDate, input.Gender, input.Weight,
+            input.BloodType, input.RhFactor);
+
+        _context.Donors.Add(donor);
+        _context.SaveChanges();
+
+        return CreatedAtAction(nameof(GetById), new { id = donor.Id }, input);
     }
 
-    [HttpPut]
-    public IActionResult Put()
+    [HttpPut("{id}")]
+    public IActionResult Put(int id, [FromBody] DonorUpdateInputModel update)
     {
-        return Ok();
+        var donor = _context.Donors.Find(id);
+        if (donor == null) return NotFound();
+
+        donor.Update(update.FullName, update.Email, update.Weight);
+        _context.SaveChanges();
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        var donor = _context.Donors.Find(id);
+
+        if (donor == null) return NotFound();
+
+        
+
+        return NoContent();
     }
 }
