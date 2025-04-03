@@ -2,6 +2,7 @@
 using BloodDonation.API.Entities;
 using BloodDonation.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BloodDonation.API.Controllers;
 
@@ -18,17 +19,21 @@ public class DonationController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(_context.Donors.ToList());
+        var donation = _context.Donations.Include(d => d.Donor).ToList();
+
+        var donationsView = donation.Select(d => DonationInputViewModel.FromEntity(d)).ToList();
+
+        return Ok(donationsView);
     }
 
     [HttpGet("{id}")]
     public IActionResult GetDonation(int id)
     {
-        var donation = _context.Donations.Find(id);
+        var donation = _context.Donations.Include(d => d.Donor).SingleOrDefault(d => d.Id == id);
 
-        if (donation == null) return NotFound();
+        var model = DonationInputViewModel.FromEntity(donation);
 
-        return Ok(donation);
+        return Ok(model);
     }
 
     [HttpPost]
