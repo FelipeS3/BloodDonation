@@ -1,4 +1,6 @@
-﻿namespace BloodDonation.API.Entities;
+﻿using BloodDonation.API.Models;
+
+namespace BloodDonation.API.Entities;
 
 public class Donation : BaseEntity
 {
