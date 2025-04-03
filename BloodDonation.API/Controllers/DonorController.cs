@@ -11,7 +11,7 @@ namespace BloodDonation.API.Controllers;
 public class DonorController : ControllerBase
 {
     private readonly BloodDonationDbContext _context;
-    private DonorController(BloodDonationDbContext context)
+    public DonorController(BloodDonationDbContext context)
     {
         _context = context;
     }
@@ -21,24 +21,25 @@ public class DonorController : ControllerBase
     {
         var donors = _context.Donors.Include(d => d.Donations).ToList();
 
-        return Ok(donors);
+        var model = donors.Select(d => DonorInputViewModel.ToEntity(d));
+
+        return Ok(model);
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var donations = _context.Donations
-            .Where(d => d.DonorId == id)
-            .ToList();
+        var donor = _context.Donors.FirstOrDefault(d => d.Id == id);
 
-        return Ok(donations);
+        var model = DonorInputViewModel.ToEntity(donor);
+
+        return Ok(model);
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] DonorInputViewModel input)
+    public IActionResult PostDonor([FromBody] CreateDonorInputViewModel input)
     {
-        var donor = new Donor(input.FullName, input.Email, input.BirthDate, input.Gender, input.Weight,
-            input.BloodType, input.RhFactor);
+        var donor = input.ToEntity(); 
 
         _context.Donors.Add(donor);
         _context.SaveChanges();
@@ -47,7 +48,7 @@ public class DonorController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] DonorUpdateInputModel update)
+    public IActionResult PutDonor(int id, [FromBody] DonorUpdateInputModel update)
     {
         var donor = _context.Donors.Find(id);
         if (donor == null) return NotFound();
@@ -67,7 +68,8 @@ public class DonorController : ControllerBase
 
         if (donor == null) return NotFound();
 
-        
+        _context.Donors.Remove(donor);
+        _context.SaveChanges();
 
         return NoContent();
     }
