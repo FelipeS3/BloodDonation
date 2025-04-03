@@ -1,4 +1,7 @@
 
+using BloodDonation.API.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace BloodDonation.API
 {
     public class Program
@@ -8,6 +11,9 @@ namespace BloodDonation.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddDbContext<BloodDonationDbContext>(options =>
+                options.UseInMemoryDatabase("MeuBanco"));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
