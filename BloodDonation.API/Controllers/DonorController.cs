@@ -19,9 +19,9 @@ public class DonorController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var donor = _context.Donors.ToList();
+        var donors = _context.Donors.Include(d => d.Donations).ToList();
 
-        return Ok(donor);
+        return Ok(donors);
     }
 
     [HttpGet("{id}")]
@@ -51,6 +51,8 @@ public class DonorController : ControllerBase
     {
         var donor = _context.Donors.Find(id);
         if (donor == null) return NotFound();
+
+        if(update.Weight < 54) throw new ArgumentException("Minimum weight of 50 kg");
 
         donor.Update(update.FullName, update.Email, update.Weight);
         _context.SaveChanges();
