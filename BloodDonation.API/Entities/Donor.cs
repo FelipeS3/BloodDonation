@@ -51,4 +51,11 @@ public class Donor : BaseEntity
 
         return true;
     }
+
+    public void Update(string fullName, string email, double weight)
+    {
+        FullName = fullName;
+        Email = email;
+        Weight = weight;
+    }
 }
