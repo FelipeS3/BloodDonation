@@ -14,10 +14,12 @@ public class Donor : BaseEntity
         BloodType = bloodType;
         RhFactor = rhFactor;
         Donations = [];
+        Address = null!;
 
         if (string.IsNullOrWhiteSpace(fullName)) throw new ArgumentException("Full name cannot be empty.", nameof(fullName));
 
         if (weight < 50) throw new ArgumentException("Minimum weight must be 50 kilos.");
+
 
     }
     public string FullName { get; private set; }
@@ -27,7 +29,7 @@ public class Donor : BaseEntity
     public double Weight { get; private set; }
     public string BloodType { get; private set; }
     public string RhFactor { get; private set; }
-    public Address? Address { get; private set; }
+    public Address Address { get; private set; }
     public List<Donation> Donations { get; private set; }
     
     public int Age => DateTime.Today.Year - BirthDate.Year - (DateTime.Today.DayOfYear < BirthDate.DayOfYear ? 1 : 0);
@@ -48,12 +50,5 @@ public class Donor : BaseEntity
         }
 
         return true;
-    }
-
-    public void Update(string? fullName, string? email, double weight)
-    {
-        FullName = fullName;
-        Email = email;
-        Weight = weight;
     }
 }
