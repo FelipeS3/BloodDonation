@@ -21,7 +21,7 @@ public class DonationController : ControllerBase
     {
         var donation = _context.Donations.Include(d => d.Donor).ToList();
 
-        var donationsView = donation.Select(d => DonationInputViewModel.FromEntity(d)).ToList();
+        var donationsView = donation.Select(d => DonationViewModel.FromEntity(d)).ToList();
 
         return Ok(donationsView);
     }
@@ -31,17 +31,21 @@ public class DonationController : ControllerBase
     {
         var donation = _context.Donations.Include(d => d.Donor).SingleOrDefault(d => d.Id == id);
 
-        var model = DonationInputViewModel.FromEntity(donation);
+        var model = DonationViewModel.FromEntity(donation);
 
         return Ok(model);
     }
 
     [HttpPost]
-    public IActionResult RegisterDonation([FromBody] CreateDonationInputModel input)
+    public IActionResult PostDonation([FromBody] CreateDonationInputModel input)
     {
+        var donor = _context.Donors.Find(input.DonorId);
+
+        if (donor == null) return BadRequest("Donor not found.");
+
         var donation = input.ToEntity();
         
-        _context.Donations.Add(donation);
+        _context.Donations.Add(donation); 
         _context.SaveChanges();
        
         return Ok(new
