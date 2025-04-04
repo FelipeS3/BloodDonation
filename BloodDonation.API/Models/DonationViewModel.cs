@@ -2,9 +2,9 @@
 
 namespace BloodDonation.API.Models;
 
-public record DonationInputViewModel
+public record DonationViewModel
 {
-    public DonationInputViewModel(int id, int donorId, string donorName, int volumeInMl)
+    public DonationViewModel(int id, int donorId, string donorName, int volumeInMl)
     {
         Id = id;
         DonorId = donorId;
@@ -19,5 +19,5 @@ public record DonationInputViewModel
     public int VolumeInML { get; private set; }
     public DateTime DonationTime { get; private set; }
 
-    public static DonationInputViewModel FromEntity(Donation donation) => new(donation.Id, donation.DonorId, donation.Donor.FullName,donation.VolumeInML);
+    public static DonationViewModel FromEntity(Donation donation) => new(donation.Id, donation.DonorId, donation.Donor.FullName,donation.VolumeInML);
 }
