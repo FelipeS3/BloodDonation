@@ -12,5 +12,12 @@ public class BloodStock : BaseEntity
     public string BloodType { get; private set; }
     public string RhFactor { get; private set; }
     public int VolumeInML { get; private set; }
+
+    public void Update(string bloodType, string rhFactor, int volumeInML)
+    {
+        BloodType = bloodType;
+        RhFactor = rhFactor;
+        VolumeInML = volumeInML;
+    }
 }   
 
