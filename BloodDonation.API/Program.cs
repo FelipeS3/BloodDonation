@@ -13,7 +13,7 @@ namespace BloodDonation.API
             // Add services to the container.
 
             builder.Services.AddDbContext<BloodDonationDbContext>(options =>
-                options.UseInMemoryDatabase("MeuBanco"));
+                options.UseInMemoryDatabase("BloodDonationDb"));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
