@@ -19,9 +19,9 @@ public class DonorController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var donors = _context.Donors.Include(d => d.Donations).ToList();
+        var donors = _context.Donors.ToList();
 
-        var model = donors.Select(d => DonorInputViewModel.ToEntity(d));
+        var model = donors.Select(d => DonorViewModel.FromEntity(d));
 
         return Ok(model);
     }
@@ -31,7 +31,9 @@ public class DonorController : ControllerBase
     {
         var donor = _context.Donors.FirstOrDefault(d => d.Id == id);
 
-        var model = DonorInputViewModel.ToEntity(donor);
+        if (donor == null) return NotFound("Donor Not Found");
+
+        var model = DonorDetailsViewModel.FromEntity(donor);
 
         return Ok(model);
     }
@@ -39,12 +41,24 @@ public class DonorController : ControllerBase
     [HttpPost]
     public IActionResult PostDonor([FromBody] CreateDonorInputViewModel input)
     {
-        var donor = input.ToEntity(); 
+        try
+        {
+            var donor = input.ToEntity();
 
-        _context.Donors.Add(donor);
-        _context.SaveChanges();
+            if (_context.Donors.Any(d => d.Email == donor.Email))
+            {
+                return BadRequest("Email already exist.");
+            }
 
-        return CreatedAtAction(nameof(GetById), new { id = donor.Id }, input);
+            _context.Donors.Add(donor);
+            _context.SaveChanges();
+
+            return CreatedAtAction(nameof(GetById), new { id = donor.Id }, input);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPut("{id}")]
@@ -53,7 +67,7 @@ public class DonorController : ControllerBase
         var donor = _context.Donors.Find(id);
         if (donor == null) return NotFound();
 
-        if(update.Weight < 54) throw new ArgumentException("Minimum weight of 50 kg");
+        if(update.Weight < 50) throw new ArgumentException("Minimum weight of 50 kg");
 
         donor.Update(update.FullName, update.Email, update.Weight);
         _context.SaveChanges();
