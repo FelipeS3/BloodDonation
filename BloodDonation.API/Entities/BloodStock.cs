@@ -2,15 +2,15 @@
 
 public class BloodStock : BaseEntity
 {
-    public BloodStock(string typeBlood, string factorRh, int volumeMl)
+    public BloodStock(string bloodType, string rhFactor, int volumeInML)
     {
-        TypeBlood = typeBlood;
-        FactorRH = factorRh;
-        VolumeML = volumeMl;
+        BloodType = bloodType;
+        RhFactor = rhFactor;
+        VolumeInML = volumeInML;
     }
 
-    public string TypeBlood { get; private set; }
-    public string FactorRH { get; private set; }
-    public int VolumeML { get; private set; }
-}
+    public string BloodType { get; private set; }
+    public string RhFactor { get; private set; }
+    public int VolumeInML { get; private set; }
+}   
 
