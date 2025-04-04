@@ -15,6 +15,24 @@ public class BloodDonationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(builder);
+        builder.Entity<Donor>(e=>
+        {
+            
+        });
+
+        builder.Entity<Donor>(e =>
+        {
+
+        });
+
+        builder.Entity<Donor>(e =>
+        {
+
+        });
+
+        builder.Entity<Donor>(e =>
+        {
+
+        });
     }
 }
