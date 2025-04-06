@@ -11,7 +11,8 @@ public class BloodDonationDbContext : DbContext
     public DbSet<Donor> Donors { get; set; }
     public DbSet<Donation> Donations { get; set; }
     public DbSet<BloodStock> BloodStocks { get; set; }
-    public DbSet<Address> Addresses { get; set; }
+    public DbSet<Address> Addresses { get; set; }  
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
