@@ -23,5 +23,10 @@ public class BloodStockController : ControllerBase
         return Ok(stocks);
     }
 
+    [HttpPost]
+    public IActionResult Post()
+    {
+        return Created();
+    }
 
 }
