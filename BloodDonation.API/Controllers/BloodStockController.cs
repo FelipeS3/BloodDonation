@@ -17,16 +17,9 @@ public class BloodStockController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var donor = _context.Donors.Include(d => d.Donations).ToList();
+        var stocks = _context.BloodStocks.ToList();
 
-        var stocks = _context.BloodStocks;
         return Ok(stocks);
-    }
-
-    [HttpPost]
-    public IActionResult Post()
-    {
-        return Created();
     }
 
 }
