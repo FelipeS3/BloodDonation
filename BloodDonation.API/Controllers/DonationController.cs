@@ -4,6 +4,7 @@ using BloodDonation.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace BloodDonation.API.Controllers;
 
 [ApiController]
@@ -48,34 +49,33 @@ public class DonationController : ControllerBase
             var donor = _context.Donors.Find(input.DonorId);
 
             if (donor == null) return BadRequest("Donor not found.");
-
             if (donor.Age < 18) throw new ArgumentException("Donor must be at least 18 years old.");
 
             var donation = input.ToEntity();
             _context.Donations.Add(donation);
 
             var bloodStock =
-                _context.BloodStocks.FirstOrDefault(b =>
-                    b.BloodType == donor.BloodType && donor.RhFactor == b.RhFactor);
+                _context.BloodStocks.FirstOrDefault(x =>
+                    x.BloodType == donor.BloodType && x.RhFactor == donor.RhFactor);
 
             if (bloodStock == null)
             {
-                bloodStock = new BloodStock(donor.BloodType, donor.RhFactor, input.VolumeInML);
-                _context.SaveChanges();
+                var stock = new BloodStock(donor.BloodType, donor.RhFactor, input.VolumeInML);
+                _context.BloodStocks.Add(stock);
             }
-            else
+
+            if (bloodStock != null)
             {
-                bloodStock.Update(bloodStock.BloodType,bloodStock.RhFactor,input.VolumeInML);
-                _context.BloodStocks.Update(bloodStock);
+                bloodStock.AddVolume(input.VolumeInML);
+              
             }
 
             _context.SaveChanges();
-            return CreatedAtAction(nameof(GetDonation), new { id = donation.Id }, DonationViewModel.FromEntity(donation));
+            return CreatedAtAction(nameof(GetDonation), new { id = input.DonorId }, input);
         }
-        catch (ArgumentException ex)
+        catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            throw new ArgumentException(ex.Message);
         }
-        
     }
 }
