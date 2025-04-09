@@ -22,4 +22,12 @@ public class BloodStockController : ControllerBase
         return Ok(stocks);
     }
 
+    [HttpGet("tipo-sangue")]
+    public IActionResult Get()
+    {
+        var stock = _context.BloodStocks.Include(x=>x.RhFactor).Select(x => x.BloodType);
+
+        return Ok(stock);
+    }
+
 }
