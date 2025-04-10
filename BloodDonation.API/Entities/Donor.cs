@@ -21,7 +21,6 @@ public class Donor : BaseEntity
         if (weight < 50) throw new ArgumentException("Minimum weight must be 50 kilos.");
 
         Update(fullName, email, weight);
-
     }
     public string FullName { get; private set; }
     public string Email { get; private set; }
