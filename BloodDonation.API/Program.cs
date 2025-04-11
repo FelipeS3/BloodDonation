@@ -1,5 +1,5 @@
-
 using BloodDonation.API.Data;
+using BloodDonation.API.ExceptionHandler;
 using Microsoft.EntityFrameworkCore;
 
 namespace BloodDonation.API
@@ -15,6 +15,11 @@ namespace BloodDonation.API
             builder.Services.AddDbContext<BloodDonationDbContext>(options =>
                 options.UseInMemoryDatabase("BloodDonationDb"));
 
+            builder.Services.AddExceptionHandler<ApiExceptionHandler>();
+            builder.Services.AddProblemDetails();
+
+            //builder.Services.AddDbContext<BloodDonationDbContext>();
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -28,6 +33,8 @@ namespace BloodDonation.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseExceptionHandler();
 
             app.UseHttpsRedirection();
 
