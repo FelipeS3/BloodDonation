@@ -48,8 +48,12 @@ public class DonationController : ControllerBase
         {
             var donor = _context.Donors.Find(input.DonorId);
 
-            if (donor == null) return BadRequest("Donor not found.");
-            if (donor.Age < 18) throw new ArgumentException("Donor must be at least 18 years old.");
+            if (donor == null) throw new ArgumentException("Donor not found.");
+            if (donor.Age < 18) throw new ArgumentException("Donor must be at least 18 years old to donate.");
+            if (donor.Weight < 50) throw new ArgumentException("Minimum weight must be 50 kilos to donate.");
+            if (input.VolumeInML is < 420 or > 470) throw new ArgumentException("Blood donation volume must be between 420ml and 470ml");
+
+            donor.CanDonate();
 
             var donation = input.ToEntity();
             _context.Donations.Add(donation);
@@ -57,6 +61,7 @@ public class DonationController : ControllerBase
             var bloodStock =
                 _context.BloodStocks.FirstOrDefault(x =>
                     x.BloodType == donor.BloodType && x.RhFactor == donor.RhFactor);
+
 
             if (bloodStock == null)
             {
@@ -67,15 +72,20 @@ public class DonationController : ControllerBase
             if (bloodStock != null)
             {
                 bloodStock.AddVolume(input.VolumeInML);
-              
             }
 
             _context.SaveChanges();
+
             return CreatedAtAction(nameof(GetDonation), new { id = input.DonorId }, input);
         }
         catch (Exception ex)
         {
-            throw new ArgumentException(ex.Message);
+            return BadRequest(new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Validation error",
+                Detail = $"{ex.Message}"
+            });
         }
     }
 }
