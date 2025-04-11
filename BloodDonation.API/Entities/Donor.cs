@@ -15,12 +15,6 @@ public class Donor : BaseEntity
         RhFactor = rhFactor;
         Donations = [];
         Address = null!;
-
-        if (string.IsNullOrWhiteSpace(fullName)) throw new ArgumentException("Full name cannot be empty.", nameof(fullName));
-
-        if (weight < 50) throw new ArgumentException("Minimum weight must be 50 kilos.");
-
-        Update(fullName, email, weight);
     }
     public string FullName { get; private set; }
     public string Email { get; private set; }
@@ -34,10 +28,10 @@ public class Donor : BaseEntity
     
     public int Age => DateTime.Today.Year - BirthDate.Year - (DateTime.Today.DayOfYear < BirthDate.DayOfYear ? 1 : 0);
 
-    private bool CanDonate()
+    public void CanDonate()
     {
-        if (Weight < 50) return false;
-        if (Age < 18) return false;
+        if (Weight < 50) throw new ArgumentException("Minimum weight of 50kg to donate");
+        if (Age < 18) throw new ArgumentException("Minimum age of 18 years old to donate");
 
         var lastDonation = Donations.OrderByDescending(d => d.DonationDate).FirstOrDefault();
 
@@ -45,11 +39,9 @@ public class Donor : BaseEntity
         {
             var daysSinceLast = (DateTime.Now - lastDonation.DonationDate).TotalDays;
 
-            if (Gender == Gender.Female && daysSinceLast < 90) return false;
-            if (Gender == Gender.Male && daysSinceLast < 60) return false;
+            if (Gender == Gender.Female && daysSinceLast < 90) throw new ArgumentException("Female can only donate after 90 days");
+            if (Gender == Gender.Male && daysSinceLast < 60) throw new ArgumentException("Males can only donate after 60 days");
         }
-
-        return true;
     }
 
     public void Update(string fullName, string email, double weight)
