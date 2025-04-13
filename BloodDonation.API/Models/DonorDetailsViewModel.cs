@@ -5,7 +5,7 @@ namespace BloodDonation.API.Models;
 
 public record DonorDetailsViewModel
 {
-    public DonorDetailsViewModel(int id, string fullName, string email, DateTime birthDate, Gender gender, double weight, string bloodType, string rhFactor)
+    public DonorDetailsViewModel(int id, string fullName, string email, DateTime birthDate, Gender gender, double weight, string bloodType, string rhFactor, List<DonationViewModel> donations)
     {
         Id = id;
         FullName = fullName;
@@ -15,7 +15,7 @@ public record DonorDetailsViewModel
         Weight = weight;
         BloodType = bloodType;
         RhFactor = rhFactor;
-        Donations = [];
+        Donations = donations;
     }
     public int Id { get; private set; }
     public string FullName { get; private set; }
@@ -27,9 +27,15 @@ public record DonorDetailsViewModel
     public string RhFactor { get; private set; }
     public List<DonationViewModel> Donations { get; set; }
 
-    public static DonorDetailsViewModel FromEntity(Donor donor) => new DonorDetailsViewModel(donor.Id,
-        donor.FullName, donor.Email, donor.BirthDate, donor.Gender, donor.Weight, donor.BloodType, donor.RhFactor)
-    {
-        Donations = donor.Donations.Select(d => DonationViewModel.FromEntity(d)).ToList()
-    };
+    public static DonorDetailsViewModel FromEntity(Donor donor) => new DonorDetailsViewModel(
+        donor.Id,
+        donor.FullName,
+        donor.Email,
+        donor.BirthDate,
+        donor.Gender,
+        donor.Weight,
+        donor.BloodType,
+        donor.RhFactor,
+        donor.Donations.Select(DonationViewModel.FromEntity).ToList()
+    );
 }
