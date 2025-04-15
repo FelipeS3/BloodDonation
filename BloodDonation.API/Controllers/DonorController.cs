@@ -1,10 +1,6 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using BloodDonation.Application.Models;
+﻿using BloodDonation.Application.Models;
 using BloodDonation.Application.Services;
-using BloodDonation.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace BloodDonation.API.Controllers;
 
