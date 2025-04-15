@@ -12,5 +12,4 @@ public class Donation : BaseEntity
     public DateTime DonationDate { get; private set; }
     public int DonorId { get; private set; }
     public Donor Donor { get; private set; }
-
 } 

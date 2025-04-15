@@ -13,7 +13,6 @@ public class Donor : BaseEntity
         Weight = weight;
         BloodType = bloodType;
         RhFactor = rhFactor;
-        Address = null!;
     }
     public string FullName { get; private set; }
     public string Email { get; private set; }
