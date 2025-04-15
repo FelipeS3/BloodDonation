@@ -1,5 +1,4 @@
 using BloodDonation.API.ExceptionHandler;
-using BloodDonation.Application;
 using BloodDonation.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,8 +14,6 @@ namespace BloodDonation.API
 
             var connectionString = builder.Configuration.GetConnectionString("BloodDonationCs");
             builder.Services.AddDbContext<BloodDonationDbContext>(x=>x.UseSqlServer(connectionString));
-
-            builder.Services.AddApplication();
 
             builder.Services.AddExceptionHandler<ApiExceptionHandler>();
             builder.Services.AddProblemDetails();

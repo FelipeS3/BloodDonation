@@ -1,6 +1,8 @@
 ﻿using BloodDonation.Application.Models;
-using BloodDonation.Application.Services;
+using BloodDonation.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BloodDonation.API.Controllers;
 
@@ -8,62 +10,71 @@ namespace BloodDonation.API.Controllers;
 [Route("[controller]/api")]
 public class DonorController : ControllerBase
 {
-    private readonly IDonorService _service;
-    public DonorController(IDonorService service)
+    private readonly BloodDonationDbContext _context;
+    public DonorController(BloodDonationDbContext context)
     {
-        _service = service;
+        _context = context;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        //Ainda n retornando casos de null ou error na controller.
-        var result = _service.GetAll();
+        var donors = _context.Donors.Include(d=>d.Donations).ToList();
 
-        if (!result.IsSuccess)
-        {
-            return NotFound(result.Message);
-        }
+        var model = donors.Select(d => DonorViewModel.FromEntity(d)).ToList();
 
-        return Ok(result);
+        if (model.IsNullOrEmpty()) return NotFound("No donors registered yet");
+
+        return Ok(model);
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var result = _service.GetById(id);
+        var donor = _context.Donors.Include(d=>d.Donations).FirstOrDefault(d => d.Id == id);
 
-        if (!result.IsSuccess)
-        {
-            return NotFound(result.Message);
-        }
+        if (donor == null) return NotFound("Donor Not Found");
 
-        return Ok(result);
+        var model = DonorDetailsViewModel.FromEntity(donor);
+
+        return Ok(model);
     }
 
     [HttpPost]
     public IActionResult PostDonor(CreateDonorInputViewModel input)
     {
-        var result = _service.Insert(input);
-
-        if (!result.IsSuccess)
+        try
         {
-            return BadRequest(result.Message);
+            var donor = input.ToEntity();
+
+            if (_context.Donors.Any(d => d.Email == donor.Email))
+            {
+                return BadRequest("Email already exist.");
+            }
+
+            if (string.IsNullOrEmpty(donor.FullName)) throw new ArgumentException("Full name cannot be empty.", nameof(donor.FullName));
+
+            _context.Donors.Add(donor);
+            _context.SaveChanges();
+
+            return CreatedAtAction(nameof(GetById), new { id = donor.Id }, input);
         }
-
-        return CreatedAtAction(nameof(GetById), new {id = result.Data}, input);
-
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPut("{id}")]
     public IActionResult PutDonor(int id,DonorUpdateInputModel update)
     {
-        var result = _service.Update(id, update);
+        var donor = _context.Donors.Find(id);
+        if (donor == null) return NotFound("No donors registered yet");
 
-        if (!result.IsSuccess)
-        {
-            return BadRequest(result.Message);
-        }
+        if(update.Weight < 50) throw new ArgumentException("Minimum weight of 50 kg");
+
+        donor.Update(update.FullName, update.Email, update.Weight);
+        _context.SaveChanges();
 
         return NoContent();
     }
@@ -71,12 +82,12 @@ public class DonorController : ControllerBase
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        var result = _service.Delete(id);
+        var donor = _context.Donors.Find(id);
 
-        if (!result.IsSuccess)
-        {
-            return NotFound(result.Message);
-        }
+        if (donor == null) return NotFound("No donors registered yet");
+
+        _context.Donors.Remove(donor);
+        _context.SaveChanges();
 
         return NoContent();
     }
