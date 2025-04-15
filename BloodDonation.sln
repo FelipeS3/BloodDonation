@@ -5,6 +5,12 @@ VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodDonation.API", "BloodDonation.API\BloodDonation.API.csproj", "{8DD9E141-1F23-463C-BF8D-E1E5630B0EB1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodDonation.Application", "BloodDonation.Application\BloodDonation.Application.csproj", "{B83BBA80-9869-4091-B841-502B0B3755EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodDonation.Core", "BloodDonation.Core\BloodDonation.Core.csproj", "{95658D72-F940-4986-9853-E54E7045DD48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodDonation.Infrastructure", "BloodDonation.Infrastructure\BloodDonation.Infrastructure.csproj", "{C6820136-A081-4795-89C4-80CCC04DB0EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{8DD9E141-1F23-463C-BF8D-E1E5630B0EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DD9E141-1F23-463C-BF8D-E1E5630B0EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DD9E141-1F23-463C-BF8D-E1E5630B0EB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B83BBA80-9869-4091-B841-502B0B3755EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B83BBA80-9869-4091-B841-502B0B3755EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B83BBA80-9869-4091-B841-502B0B3755EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B83BBA80-9869-4091-B841-502B0B3755EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95658D72-F940-4986-9853-E54E7045DD48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95658D72-F940-4986-9853-E54E7045DD48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95658D72-F940-4986-9853-E54E7045DD48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95658D72-F940-4986-9853-E54E7045DD48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6820136-A081-4795-89C4-80CCC04DB0EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6820136-A081-4795-89C4-80CCC04DB0EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6820136-A081-4795-89C4-80CCC04DB0EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6820136-A081-4795-89C4-80CCC04DB0EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

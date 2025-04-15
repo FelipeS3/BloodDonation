@@ -1,4 +1,4 @@
-﻿namespace BloodDonation.API.Eum;
+﻿namespace BloodDonation.Core.Enum;
 
 public enum Gender
 {

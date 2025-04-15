@@ -1,8 +1,8 @@
-﻿using BloodDonation.API.Data;
-using BloodDonation.API.Entities;
-using BloodDonation.API.Models;
+﻿using BloodDonation.Application.Models;
+using BloodDonation.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BloodDonation.API.Controllers;
 
@@ -19,9 +19,11 @@ public class DonorController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var donors = _context.Donors.ToList();
+        var donors = _context.Donors.Include(d=>d.Donations).ToList();
 
-        var model = donors.Select(d => DonorViewModel.FromEntity(d));
+        var model = donors.Select(d => DonorViewModel.FromEntity(d)).ToList();
+
+        if (model.IsNullOrEmpty()) return NotFound("No donors registered yet");
 
         return Ok(model);
     }
@@ -29,7 +31,7 @@ public class DonorController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var donor = _context.Donors.FirstOrDefault(d => d.Id == id);
+        var donor = _context.Donors.Include(d=>d.Donations).FirstOrDefault(d => d.Id == id);
 
         if (donor == null) return NotFound("Donor Not Found");
 
@@ -39,7 +41,7 @@ public class DonorController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult PostDonor([FromBody] CreateDonorInputViewModel input)
+    public IActionResult PostDonor(CreateDonorInputViewModel input)
     {
         try
         {
@@ -49,6 +51,8 @@ public class DonorController : ControllerBase
             {
                 return BadRequest("Email already exist.");
             }
+
+            if (string.IsNullOrEmpty(donor.FullName)) throw new ArgumentException("Full name cannot be empty.", nameof(donor.FullName));
 
             _context.Donors.Add(donor);
             _context.SaveChanges();
@@ -62,10 +66,10 @@ public class DonorController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult PutDonor(int id, [FromBody] DonorUpdateInputModel update)
+    public IActionResult PutDonor(int id,DonorUpdateInputModel update)
     {
         var donor = _context.Donors.Find(id);
-        if (donor == null) return NotFound();
+        if (donor == null) return NotFound("No donors registered yet");
 
         if(update.Weight < 50) throw new ArgumentException("Minimum weight of 50 kg");
 
@@ -80,7 +84,7 @@ public class DonorController : ControllerBase
     {
         var donor = _context.Donors.Find(id);
 
-        if (donor == null) return NotFound();
+        if (donor == null) return NotFound("No donors registered yet");
 
         _context.Donors.Remove(donor);
         _context.SaveChanges();

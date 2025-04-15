@@ -1,8 +1,8 @@
-﻿using BloodDonation.API.Entities;
+﻿using BloodDonation.Core.Entities;
 
-namespace BloodDonation.API.Models;
+namespace BloodDonation.Application.Models;
 
-public class CreateDonationInputModel
+public record CreateDonationInputModel
 {
     public CreateDonationInputModel(int donorId, int volumeInMl)
     {

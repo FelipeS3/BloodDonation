@@ -1,7 +1,7 @@
-﻿using BloodDonation.API.Entities;
-using BloodDonation.API.Eum;
+﻿using BloodDonation.Core.Entities;
+using BloodDonation.Core.Enum;
 
-namespace BloodDonation.API.Models;
+namespace BloodDonation.Application.Models;
 
 public record CreateDonorInputViewModel
 {
@@ -14,6 +14,8 @@ public record CreateDonorInputViewModel
         Weight = weight;
         BloodType = bloodType;
         RhFactor = rhFactor;
+
+        Address = null!;
     }
 
     public string FullName { get; private set; }
@@ -23,6 +25,7 @@ public record CreateDonorInputViewModel
     public double Weight { get; private set; }
     public string BloodType { get; private set; }
     public string RhFactor { get; private set; }
+    public Address Address { get; private set; }
 
     public Donor ToEntity() => new(FullName, Email, BirthDate, Gender, Weight, BloodType, RhFactor);
 }

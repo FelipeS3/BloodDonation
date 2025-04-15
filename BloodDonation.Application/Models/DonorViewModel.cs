@@ -1,8 +1,8 @@
-﻿using BloodDonation.API.Entities;
+﻿using BloodDonation.Core.Entities;
 
-namespace BloodDonation.API.Models;
+namespace BloodDonation.Application.Models;
 
-public class DonorViewModel
+public record DonorViewModel
 {
     public DonorViewModel(int id, string fullName, string email, int donationsCount)
     {
@@ -14,7 +14,7 @@ public class DonorViewModel
     public int Id { get; private set; }
     public string FullName { get; private set; }
     public string Email { get; private set; }
-    public int DonationCount { get; private set; }
+    public int DonationCount { get; set; }
 
     public static DonorViewModel FromEntity(Donor donor) => new(donor.Id, donor.FullName, donor.Email,donor.Donations.Count);
 }

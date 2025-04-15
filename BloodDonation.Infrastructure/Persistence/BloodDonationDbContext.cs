@@ -1,7 +1,7 @@
-﻿using BloodDonation.API.Entities;
+﻿using BloodDonation.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace BloodDonation.API.Data;
+namespace BloodDonation.Infrastructure.Persistence;
 
 public class BloodDonationDbContext : DbContext
 {

@@ -1,7 +1,7 @@
-﻿using BloodDonation.API.Entities;
-using BloodDonation.API.Eum;
+﻿using BloodDonation.Core.Entities;
+using BloodDonation.Core.Enum;
 
-namespace BloodDonation.API.Models;
+namespace BloodDonation.Application.Models;
 
 public record DonorDetailsViewModel
 {

@@ -1,4 +1,4 @@
-﻿namespace BloodDonation.API.Entities;
+﻿namespace BloodDonation.Core.Entities;
 
 public class Address : BaseEntity
 {

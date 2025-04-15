@@ -1,8 +1,9 @@
-﻿using BloodDonation.API.Data;
-using BloodDonation.API.Entities;
-using BloodDonation.API.Models;
+﻿using BloodDonation.Core.Entities;
+using BloodDonation.Application.Models;
+using BloodDonation.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace BloodDonation.API.Controllers;
@@ -22,7 +23,7 @@ public class DonationController : ControllerBase
     {
         var donation = _context.Donations.Include(d => d.Donor).ToList();
 
-        if (donation == null) return NotFound();
+        if (donation.IsNullOrEmpty()) return NotFound("No donations registered yet");
 
         var donationsView = donation.Select(d => DonationViewModel.FromEntity(d)).ToList();
 
@@ -34,7 +35,7 @@ public class DonationController : ControllerBase
     {
         var donation = _context.Donations.Include(d => d.Donor).SingleOrDefault(d => d.Id == id);
 
-        if (donation == null) return NotFound();
+        if (donation == null) return NotFound("No donations registered yet");
 
         var model = DonationViewModel.FromEntity(donation);
 
@@ -42,7 +43,7 @@ public class DonationController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult PostDonation([FromBody] CreateDonationInputModel input)
+    public IActionResult PostDonation(CreateDonationInputModel input)
     {
         try
         {
@@ -73,6 +74,7 @@ public class DonationController : ControllerBase
             {
                 bloodStock.AddVolume(input.VolumeInML);
             }
+            
 
             _context.SaveChanges();
 

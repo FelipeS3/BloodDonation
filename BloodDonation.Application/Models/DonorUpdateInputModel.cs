@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using BloodDonation.API.Entities;
-using BloodDonation.API.Eum;
-
-namespace BloodDonation.API.Models;
+﻿namespace BloodDonation.Application.Models;
 
 public record DonorUpdateInputModel
 {
@@ -13,7 +9,6 @@ public record DonorUpdateInputModel
         Weight = weight;
     }
     public string FullName { get; private set; }
-    [EmailAddress]
     public string Email { get; private set; }
     public double Weight { get; private set; }
 

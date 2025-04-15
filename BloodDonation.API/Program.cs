@@ -1,5 +1,5 @@
-using BloodDonation.API.Data;
 using BloodDonation.API.ExceptionHandler;
+using BloodDonation.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace BloodDonation.API
@@ -12,8 +12,8 @@ namespace BloodDonation.API
 
             // Add services to the container.
 
-            builder.Services.AddDbContext<BloodDonationDbContext>(options =>
-                options.UseInMemoryDatabase("BloodDonationDb"));
+            var connectionString = builder.Configuration.GetConnectionString("BloodDonationCs");
+            builder.Services.AddDbContext<BloodDonationDbContext>(x=>x.UseSqlServer(connectionString));
 
             builder.Services.AddExceptionHandler<ApiExceptionHandler>();
             builder.Services.AddProblemDetails();
