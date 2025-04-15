@@ -37,7 +37,7 @@ public class DonationController : ControllerBase
 
         if (donation == null) return NotFound("No donations registered yet");
 
-        var model = DonationViewModel.FromEntity(donation);
+        var model = DonationDetailsViewModel.FromEntity(donation);
 
         return Ok(model);
     }
