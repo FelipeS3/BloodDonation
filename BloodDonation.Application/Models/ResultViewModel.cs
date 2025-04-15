@@ -13,6 +13,10 @@ public class ResultViewModel
     public bool IsSuccess { get; private set; }
     public string Message { get; private set; }
 
+    //public static ResultViewModel Success(bool IsSuccess = true, string message = "") => new(true, message);
+
+    //public static ResultViewModel Error(bool IsSuccess = false, string message = "") =>
+    //    new ResultViewModel(false, message);
 }
 
 public class ResultViewModel<T> : ResultViewModel
@@ -20,6 +24,9 @@ public class ResultViewModel<T> : ResultViewModel
     public ResultViewModel(T? data, bool isSuccess = true, string message = "") : base(isSuccess, message)
     {
         Data = data;
-    }
+    } 
     public T? Data { get; private set; }
+
+    public static ResultViewModel<T> Success(T data) => new(data);
+    public static ResultViewModel<T> Error(string message) => new(default, false, message);
 }
