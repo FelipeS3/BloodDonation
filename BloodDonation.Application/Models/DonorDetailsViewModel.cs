@@ -27,7 +27,7 @@ public record DonorDetailsViewModel
     public string RhFactor { get; private set; }
     public List<DonationViewModel> Donations { get; set; }
 
-    public static DonorDetailsViewModel FromEntity(Donor donor) => new DonorDetailsViewModel(
+    public static DonorDetailsViewModel FromEntity(Donor donor) => new(
         donor.Id,
         donor.FullName,
         donor.Email,
