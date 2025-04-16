@@ -1,5 +1,6 @@
 ﻿using BloodDonation.Core.Entities;
 using BloodDonation.Application.Models;
+using BloodDonation.Application.Services;
 using BloodDonation.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,82 +13,48 @@ namespace BloodDonation.API.Controllers;
 [Route("[controller]/api")]
 public class DonationController : ControllerBase
 {
-    private readonly  BloodDonationDbContext _context;
-    public DonationController(BloodDonationDbContext context)
+    private readonly IDonationService _service;
+    public DonationController(IDonationService service)
     {
-        _context = context;
+        _service = service;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        var donation = _context.Donations.Include(d => d.Donor).ToList();
+        var result = _service.GetAll();
 
-        if (donation.IsNullOrEmpty()) return NotFound("No donations registered yet");
+        if (!result.IsSuccess)
+        {
+            return NotFound(result.Message);
+        }
 
-        var donationsView = donation.Select(d => DonationViewModel.FromEntity(d)).ToList();
-
-        return Ok(donationsView);
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetDonation(int id)
+    public IActionResult GetById(int id)
     {
-        var donation = _context.Donations.Include(d => d.Donor).SingleOrDefault(d => d.Id == id);
+        var result = _service.Get(id);
 
-        if (donation == null) return NotFound("No donations registered yet");
+        if (!result.IsSuccess)
+        {
+            return NotFound(result.Message);
+        }
 
-        var model = DonationDetailsViewModel.FromEntity(donation);
-
-        return Ok(model);
+        return Ok(result);
     }
 
     [HttpPost]
     public IActionResult PostDonation(CreateDonationInputModel input)
     {
-        try
+        var result = _service.Insert(input);
+
+        if (!result.IsSuccess)
         {
-            var donor = _context.Donors.Find(input.DonorId);
-
-            if (donor == null) throw new ArgumentException("Donor not found.");
-            if (donor.Age < 18) throw new ArgumentException("Donor must be at least 18 years old to donate.");
-            if (donor.Weight < 50) throw new ArgumentException("Minimum weight must be 50 kilos to donate.");
-            if (input.VolumeInML is < 420 or > 470) throw new ArgumentException("Blood donation volume must be between 420ml and 470ml");
-
-            donor.CanDonate();
-
-            var donation = input.ToEntity();
-            _context.Donations.Add(donation);
-
-            var bloodStock =
-                _context.BloodStocks.FirstOrDefault(x =>
-                    x.BloodType == donor.BloodType && x.RhFactor == donor.RhFactor);
-
-
-            if (bloodStock == null)
-            {
-                var stock = new BloodStock(donor.BloodType, donor.RhFactor, input.VolumeInML);
-                _context.BloodStocks.Add(stock);
-            }
-
-            if (bloodStock != null)
-            {
-                bloodStock.AddVolume(input.VolumeInML);
-            }
-            
-
-            _context.SaveChanges();
-
-            return CreatedAtAction(nameof(GetDonation), new { id = input.DonorId }, input);
+            return BadRequest(result.Message);
         }
-        catch (Exception ex)
-        {
-            return BadRequest(new ProblemDetails
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Title = "Validation error",
-                Detail = $"{ex.Message}"
-            });
-        }
+
+        return CreatedAtAction(nameof(GetById), new { id = result.Data }, input);
     }
 }
