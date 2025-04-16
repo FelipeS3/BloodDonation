@@ -17,6 +17,8 @@ public static class ApplicationModule
     private static IServiceCollection AddServices(this IServiceCollection service)
     {
         service.AddScoped<IDonorService, DonorService>();
+        service.AddScoped<IDonationService, DonationService>();
+        service.AddScoped<IBloodStockService, BloodStockService>();
 
         return service;
     }
