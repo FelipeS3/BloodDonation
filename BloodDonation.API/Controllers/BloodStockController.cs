@@ -1,4 +1,6 @@
-﻿using BloodDonation.Infrastructure.Persistence;
+﻿using BloodDonation.Application.Models;
+using BloodDonation.Application.Services;
+using BloodDonation.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -9,31 +11,36 @@ namespace BloodDonation.API.Controllers;
 [Route("[controller]/api")]
 public class BloodStockController : ControllerBase
 {
-    private readonly BloodDonationDbContext _context;
-    public BloodStockController(BloodDonationDbContext context)
+    private readonly IBloodStockService _service;
+    public BloodStockController(IBloodStockService service)
     {
-        _context = context;
+        _service = service;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        var stocks = _context.BloodStocks.ToList();
+        var result = _service.GetAll();
 
-        if (stocks.IsNullOrEmpty()) return NotFound("Empty stock");
+        if (!result.IsSuccess)
+        {
+            return NotFound(result.Message);
+        }
 
-        return Ok(stocks);
+        return Ok(result);
     }
 
     [HttpGet("type-blood")]
     public IActionResult Get(string blood = "", string rhFactor = "")
     {
-        var stock = _context.BloodStocks
-            .Include(x=>x.RhFactor)
-            .Where(x=>x.BloodType == blood || x.RhFactor == rhFactor)
-            .Select(x => x.BloodType);
+        var result = _service.Get(blood, rhFactor);
 
-        return Ok(stock);
+        if (!result.IsSuccess)
+        {
+            return NotFound(result.Message);
+        }
+
+        return Ok(result);
     }
 
 }
