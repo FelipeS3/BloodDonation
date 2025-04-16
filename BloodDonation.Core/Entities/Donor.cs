@@ -28,15 +28,14 @@ public class Donor : BaseEntity
 
     public void CanDonate()
     {
-        if (Weight < 50) throw new ArgumentException("Minimum weight of 50kg to donate");
-        if (Age < 18) throw new ArgumentException("Minimum age of 18 years old to donate");
+        //if (Weight < 50) throw new ArgumentException("Minimum weight of 50kg to donate");
+        //if (Age < 18) throw new ArgumentException("Minimum age of 18 years old to donate");
 
         var lastDonation = Donations.OrderByDescending(d => d.DonationDate).FirstOrDefault();
 
         if (lastDonation != null)
         {
             var daysSinceLast = (DateTime.Now - lastDonation.DonationDate).TotalDays;
-
             if (Gender == Gender.Female && daysSinceLast < 90) throw new ArgumentException("Female can only donate after 90 days");
             if (Gender == Gender.Male && daysSinceLast < 60) throw new ArgumentException("Males can only donate after 60 days");
         }
