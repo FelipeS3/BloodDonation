@@ -1,4 +1,5 @@
-﻿using BloodDonation.Core.Entities;
+﻿using System.Reflection;
+using BloodDonation.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BloodDonation.Infrastructure.Persistence;
@@ -15,36 +16,6 @@ public class BloodDonationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<Donor>(e=>
-        {
-            e.HasKey(d => d.Id);
-
-            e.HasMany(d => d.Donations)
-                .WithOne(d => d.Donor)
-                .HasForeignKey(d => d.DonorId);
-        });
-
-        builder.Entity<Donation>(e =>
-        {
-            e.HasKey(d => d.Id);
-
-            e.HasOne(d => d.Donor)
-                .WithMany(d => d.Donations)
-                .HasForeignKey(d => d.DonorId);
-        });
-
-        builder.Entity<BloodStock>(e =>
-        {
-            e.HasKey(b => b.Id);
-        });
-
-        builder.Entity<Address>(e =>
-        {
-            e.HasKey(a => a.Id);
-
-            e.HasOne(b => b.Donor)
-                .WithOne(b => b.Address)
-                .HasForeignKey<Address>(a => a.DonorId);
-        });
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }
