@@ -10,6 +10,9 @@ public class DonorConfigurations : IEntityTypeConfiguration<Donor>
     {
         builder.HasKey(d => d.Id);
 
+        builder.Property(d => d.Id)
+            .ValueGeneratedOnAdd();
+
         builder.HasMany(d => d.Donations)
             .WithOne(d => d.Donor)
             .HasForeignKey(d => d.DonorId);
