@@ -1,9 +1,8 @@
-﻿using BloodDonation.Application.Models;
+﻿using BloodDonation.Application.Queries.GetAllBloodStock;
+using BloodDonation.Application.Queries.GetBloodStockById;
 using BloodDonation.Application.Services;
-using BloodDonation.Infrastructure.Persistence;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace BloodDonation.API.Controllers;
 
@@ -11,33 +10,37 @@ namespace BloodDonation.API.Controllers;
 [Route("[controller]/api")]
 public class BloodStockController : ControllerBase
 {
-    private readonly IBloodStockService _service;
-    public BloodStockController(IBloodStockService service)
+    private readonly IMediator _mediator;
+    public BloodStockController(IMediator mediator)
     {
-        _service = service;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var result = _service.GetAll();
+        var query = new GetAllBloodStockQuery();
+
+        var result = await _mediator.Send(query);
 
         if (!result.IsSuccess)
         {
-            return NotFound(result.Message);
+            return BadRequest(result.Message);
         }
 
         return Ok(result);
     }
 
     [HttpGet("type-blood")]
-    public IActionResult Get(string blood = "", string rhFactor = "")
+    public async Task<IActionResult> Get(string typeBlood = "", string rhFactor = "")
     {
-        var result = _service.Get(blood, rhFactor);
+        var query = new GetBloodStockByIdQuery();
+
+        var result = await _mediator.Send(query);
 
         if (!result.IsSuccess)
         {
-            return NotFound(result.Message);
+            return BadRequest(result.Message);
         }
 
         return Ok(result);
