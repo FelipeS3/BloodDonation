@@ -1,5 +1,7 @@
 ﻿using BloodDonation.Application.Commands.InsertDonor;
+using BloodDonation.Application.Models;
 using BloodDonation.Application.Services;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BloodDonation.Application;
@@ -27,6 +29,8 @@ public static class ApplicationModule
     private static IServiceCollection AddHandlers(this IServiceCollection service)
     {
         service.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<InsertDonorCommand>());
+
+        service.AddTransient<IPipelineBehavior<InsertDonorCommand, ResultViewModel<int>>>();
 
         return service;
     }
