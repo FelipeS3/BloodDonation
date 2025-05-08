@@ -1,6 +1,10 @@
-﻿using BloodDonation.Application.Commands.InsertDonor;
+﻿using BloodDonation.Application.Commands.InsertDonation;
+using BloodDonation.Application.Commands.InsertDonor;
 using BloodDonation.Application.Models;
 using BloodDonation.Application.Services;
+using BloodDonation.Application.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,30 +12,41 @@ namespace BloodDonation.Application;
 
 public static class ApplicationModule
 {
-    public static IServiceCollection AddApplication(this IServiceCollection service)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        service
+        services
             .AddHandlers()
-            .AddServices();
+            .AddServices()
+            .AddValidations();
 
-        return service;
+        return services;
     }
 
-    private static IServiceCollection AddServices(this IServiceCollection service)
+    private static IServiceCollection AddServices(this IServiceCollection services)
     {
-        service.AddScoped<IDonorService, DonorService>();
-        service.AddScoped<IDonationService, DonationService>();
-        service.AddScoped<IBloodStockService, BloodStockService>();
+        services.AddScoped<IDonorService, DonorService>();
+        services.AddScoped<IDonationService, DonationService>();
+        services.AddScoped<IBloodStockService, BloodStockService>();
 
-        return service;
+        return services;
     }
 
-    private static IServiceCollection AddHandlers(this IServiceCollection service)
+    private static IServiceCollection AddHandlers(this IServiceCollection services)
     {
-        service.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<InsertDonorCommand>());
+        services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<InsertDonorCommand>());
 
-        service.AddTransient<IPipelineBehavior<InsertDonorCommand, ResultViewModel<int>>>();
+        services.AddTransient<IPipelineBehavior<InsertDonationCommand, ResultViewModel<int>>,
+            ValidateInsertDonationBehavior>();
 
-        return service;
+        return services;
+    }
+
+    private static IServiceCollection AddValidations(this IServiceCollection services)
+    {
+        services.AddFluentValidationAutoValidation();
+
+        services.AddValidatorsFromAssemblyContaining<InsertDonorCommandValidator>();
+
+        return services;
     }
 }
