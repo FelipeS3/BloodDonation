@@ -1,14 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BloodDonation.Core\BloodDonation.Core.csproj" />
-    <ProjectReference Include="..\BloodDonation.Infrastructure\BloodDonation.Infrastructure.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="FluentValidation" Version="12.0.0" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+		<PackageReference Include="MediatR" Version="12.5.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\BloodDonation.Core\BloodDonation.Core.csproj" />
+		<ProjectReference Include="..\BloodDonation.Infrastructure\BloodDonation.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Commands\DeleteDonor\" />
+		<Folder Include="Commands\UpdateDonor\" />
+		<Folder Include="Validators\" />
+		<Folder Include="Queries\GetDonorById\" />
+	</ItemGroup>
 
 </Project>
