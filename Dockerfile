@@ -20,4 +20,4 @@ RUN dotnet publish -c Release -o /publish
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /publish .
-ENTRYPOINT ["dotnet", "BloodDonation.API.dll", "--urls", "http://*:8080"]
+ENTRYPOINT ["dotnet", "BloodDonation.API.dll", "--urls"]
