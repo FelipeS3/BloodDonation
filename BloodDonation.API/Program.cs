@@ -1,6 +1,11 @@
 using BloodDonation.API.ExceptionHandler;
 using BloodDonation.Application;
+using BloodDonation.Application.Commands.InsertDonor;
+using BloodDonation.Application.Filters;
+using BloodDonation.Application.Validators;
 using BloodDonation.Infrastructure.Persistence;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BloodDonation.API
@@ -10,6 +15,7 @@ namespace BloodDonation.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.WebHost.UseUrls("http://*:8080");
 
             // Add services to the container.
 
@@ -19,9 +25,11 @@ namespace BloodDonation.API
             builder.Services.AddApplication();
 
             builder.Services.AddExceptionHandler<ApiExceptionHandler>();
+
             builder.Services.AddProblemDetails();
 
             builder.Services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
